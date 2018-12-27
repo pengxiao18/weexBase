@@ -14,13 +14,17 @@ import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 
+import java.util.Map;
+
 public class WXFragment extends WXComponent<FrameLayout> {
 
     public static final String NAME = "fragment";
+    private static final String JS_PATH = "jsPath";
 
     private WeexEntity weexEntity = null;
     private WeexAgency weexAgency = null;
     private String jsPath;
+    private Map<String, Object> params;
     private boolean jsRedirect = false;
     private boolean isVisible = false;
     private boolean createAgencyOnInit = false;
@@ -49,6 +53,7 @@ public class WXFragment extends WXComponent<FrameLayout> {
             }
             if (!weexAgency.isRendered()) {
                 weexEntity.setRenderJs(jsPath);
+                weexEntity.setParams(params);
                 weexAgency.render();
             }
         } else {
@@ -64,6 +69,7 @@ public class WXFragment extends WXComponent<FrameLayout> {
             }
             initWeexAgency(getContext(), getHostView());
             weexEntity.setRenderJs(jsPath);
+            weexEntity.setParams(params);
             weexAgency.render();
         }
     }
@@ -77,9 +83,17 @@ public class WXFragment extends WXComponent<FrameLayout> {
         return container;
     }
 
-    @WXComponentProp(name = "jsPath")
-    public void jsPath(String js) {
-        this.jsPath = js;
+    @WXComponentProp(name = "router")
+    public void router(Map<String, Object> params) {
+        if (params == null || params.isEmpty()) {
+            return;
+        }
+        Object jsPathObject = params.remove(JS_PATH);
+        if (jsPathObject == null) {
+            return;
+        }
+        this.params = params;
+        this.jsPath = String.valueOf(jsPathObject);
         handleRender();
     }
 

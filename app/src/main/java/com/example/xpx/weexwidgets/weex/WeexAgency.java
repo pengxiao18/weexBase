@@ -58,10 +58,10 @@ public class WeexAgency implements IWXRenderListener, Handler.Callback {
 
     private void realRender() {
         if (weexEntity.renderJs.startsWith("http")) {
-            mWXSDKInstance.renderByUrl("weexTest", weexEntity.renderJs, new HashMap<String, Object>(), null, WXRenderStrategy.APPEND_ASYNC);
+            mWXSDKInstance.renderByUrl("weexTest", weexEntity.renderJs, weexEntity.getParams(), null, WXRenderStrategy.APPEND_ASYNC);
         } else {
             String template = WXFileUtils.loadAsset(weexEntity.renderJs, weexEntity.context);
-            mWXSDKInstance.render("weexTest", template, new HashMap<String, Object>(), null, WXRenderStrategy.APPEND_ASYNC);
+            mWXSDKInstance.render("weexTest", template, weexEntity.getParams(), null, WXRenderStrategy.APPEND_ASYNC);
         }
         isRendered = true;
     }

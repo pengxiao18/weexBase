@@ -3,11 +3,17 @@ package com.example.xpx.weexwidgets.weex;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import com.example.xpx.weexwidgets.weex.util.UrlUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class WeexEntity {
 
     Context context;
     IRenderListener renderListener;
     String renderJs;
+    Map<String, Object> params;
     ViewGroup targetView;
 
     public WeexEntity(Context context, IRenderListener renderListener, String renderJs, ViewGroup targetView) {
@@ -47,5 +53,17 @@ public class WeexEntity {
 
     public void setTargetView(ViewGroup targetView) {
         this.targetView = targetView;
+    }
+
+    public Map<String, Object> getParams() {
+        Map<String, Object> urlParams = UrlUtil.getUrlParams(renderJs);
+        if (params != null && !params.isEmpty()) {
+            urlParams.putAll(params);
+        }
+        return urlParams;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
     }
 }
